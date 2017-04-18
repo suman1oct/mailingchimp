@@ -1,0 +1,62 @@
+
+Models
+	Campaign
+		mailing_list(foreignkey mailing_list)
+		Name
+		User(foreignkey user)
+		Created_date
+		template
+
+	Mailing_list
+		name
+		user (foreignkey_user)
+		mailing_list_path
+	
+	Template_list
+		image
+		template_name
+		category
+		path
+
+	user_profile
+		user(foreignkey user)
+		package(choice_field)
+		sent_email
+		remaining_email
+		business_name
+		
+	
+FORM
+	Sign-up
+		-User name
+		-Name
+		-Business Name
+		-Email
+		-Password
+		package
+	
+	Sign-in
+		Name
+		password
+
+	user_valid(use before upload mailing list)
+		validate username and email 
+
+Views:
+	homepage
+	sign-up
+	login
+	logout
+	dashboard
+	template_browse
+	edit_campaign
+
+
+https://pypi.python.org/pypi/flake8
+
+
+
+
+
+
+

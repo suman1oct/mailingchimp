@@ -1,0 +1,333 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"mar",
+				"margin"
+			],
+			[
+				"con",
+				"context"
+			],
+			[
+				"s",
+				"static"
+			],
+			[
+				"ur",
+				"urls"
+			],
+			[
+				"co",
+				"conf"
+			],
+			[
+				"url",
+				"urlpatterns"
+			],
+			[
+				"dir",
+				"BASE_DIR"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 52.0,
+		"last_filter": "view:toggle menu",
+		"selected_items":
+		[
+			[
+				"view:toggle menu",
+				"View: Toggle Menu"
+			],
+			[
+				"vi",
+				"View: Toggle Menu"
+			],
+			[
+				"toggle me",
+				"View: Toggle Menu"
+			],
+			[
+				"me",
+				"View: Toggle Menu"
+			]
+		],
+		"width": 485.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/suman/mailingchimp/chimp/models.py",
+		"/home/suman/mailingchimp/untitled",
+		"/home/suman/Documents/blogproject/static/css/main.css",
+		"/home/suman/Documents/blogproject/blog/templates/blog/homepage.html",
+		"/home/suman/Documents/blogproject/blog/models.py",
+		"/home/suman/Documents/blogproject/blog/templates/blog/dAshboard.html",
+		"/home/suman/Documents/blogproject/blog/templates/blog/dashboard.html",
+		"/home/suman/Documents/blogproject/blog/templates/blog/login.html",
+		"/home/suman/Documents/blogproject/templates/base.html",
+		"/home/suman/Documents/blogproject/blog/templates/blog/sign-up.html",
+		"/home/suman/blogproject/blog/templates/blog/detail.html",
+		"/home/suman/blogproject/blog/views.py",
+		"/home/suman/blogproject/blog/templates/blog/blog_detail.html",
+		"/home/suman/blogproject/blog/templates/blog/rc5trcdrdc.html",
+		"/home/suman/blogproject/blog/templates/blog/homepage.html",
+		"/home/suman/blogproject/blog/templates/blog/login.html",
+		"/home/suman/blogproject/blog/urls.py",
+		"/home/suman/blogproject/blog/templates/blog/dashboard.html",
+		"/home/suman/blogproject/blog/templates/blog/sign-up.html",
+		"/home/suman/blogproject/templates/base.html",
+		"/home/suman/blogproject/static/blog/style.css",
+		"/home/suman/blogproject/blog/templates/blog/dAshboard.html",
+		"/home/suman/Documents/blogproject/blogproject/urls.py",
+		"/home/suman/Documents/blogproject/blog/urls.py",
+		"/home/suman/Documents/polls/templates/polls/loggedin.html",
+		"/home/suman/Documents/polls/templates/polls/login.html",
+		"/home/suman/Documents/blogproject/blog/views.py",
+		"/home/suman/Documents/blogproject/blog/forms.py",
+		"/home/suman/Desktop/Photo/index.html",
+		"/home/suman/blogproject/blogproject/settings.py",
+		"/home/suman/Desktop/pjo/index.html",
+		"/home/suman/Documents/myblogsite/myblogsite/settings.py",
+		"/home/suman/blogproject/blogproject/urls.py",
+		"/home/suman/blogproject/blog/models.py",
+		"/home/suman/blogproject/manage.py",
+		"/home/suman/blogproject/blog/templates/blog/blog_result.html",
+		"/home/suman/blogproject/blog/templates/blog/post_list.html",
+		"/home/suman/Documents/blogproject/blogproject/settings.py",
+		"/home/suman/blogproject/blog/templates/blog/post_list2.html",
+		"/home/suman/blogproject/blog/templates/blog/ph.html",
+		"/home/suman/blogproject/static/css/main.css",
+		"/home/suman/blogproject/blog/templates/blog/post_list (copy).html",
+		"/home/suman/blogproject/blog/admin.py",
+		"/home/suman/Documents/polls/templates/polls/detail.html",
+		"/home/suman/blogproject/venv/lib/python3.5/site-packages/ckeditor_demo/urls.py",
+		"/home/suman/blogproject/blog/static/blog/Untitled Document",
+		"/home/suman/blogproject/blog/static/blog/style.css",
+		"/home/suman/Documents/polls/templates/polls/index.html",
+		"/home/suman/Documents/polls/views.py",
+		"/home/suman/newproject/blog/models.py",
+		"/home/suman/newproject/blog/views.py",
+		"/home/suman/newproject/blog/admin.py",
+		"/home/suman/newproject/newproject/settings.py",
+		"/home/suman/newsite/newapp/models.py",
+		"/home/suman/newsite/newapp/views.py",
+		"/home/suman/newsite/newapp/urls.py",
+		"/home/suman/test.html",
+		"/home/suman/newsite/newsite/urls.py",
+		"/home/suman/Documents/polls/models.py",
+		"/home/suman/newproject/newapp/models.py"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			"/home/suman/blogproject/blog,/home/suman/blogproject/blogproject,/home/suman/blogproject/media,/home/suman/blogproject/static",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"no-padding",
+			"CKEDITOR_UPLOAD_SLUGIFY_FILENAME",
+			"CKEDITOR_UPLOAD_PATH = \"uploads/\"",
+			"url(r'^ckeditor/', include('ckeditor_uploader.urls')),",
+			"MEDIA",
+			"media",
+			"CKEDITOR_RESTRICT_BY_USER",
+			"CKEDITOR_IMAGE_BACKEND",
+			"CKEDITOR_UPLOAD_PATH = \"uploads/\"",
+			"site_media",
+			"CKEDITOR_UPLOAD_PATH = \"uploads/\"",
+			"Settings",
+			"CKEDITOR_UPLOAD_PATH",
+			"Searching",
+			"ckeditor/'",
+			"(r'^ckeditor/', include('ckeditor_uploader.urls')),",
+			"ckeditor_uploader",
+			"keditor_uploader",
+			"CKEDITOR_JQUERY_URL"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": false,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "mailingchimp.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"ho",
+				"blog/templates/blog/homepage.html"
+			],
+			[
+				"base",
+				"templates/base.html"
+			],
+			[
+				"hoem",
+				"blog/templates/blog/homepage.html"
+			],
+			[
+				"css",
+				"static/blog/style.css"
+			],
+			[
+				"ba",
+				"templates/base.html"
+			],
+			[
+				"blo",
+				"blog/templates/blog/blog_detail.html"
+			],
+			[
+				"sett",
+				"blogproject/settings.py"
+			],
+			[
+				"",
+				"manage.py"
+			],
+			[
+				"main",
+				"static/css/main.css"
+			],
+			[
+				"home",
+				"blog/templates/blog/homepage.html"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "menu",
+		"selected_items":
+		[
+			[
+				"menu",
+				"~/Documents/blogproject/blogproject.sublime-workspace"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 126.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

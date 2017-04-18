@@ -55,7 +55,7 @@ ROOT_URLCONF = 'mailingchimp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -63,6 +63,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+
             ],
         },
     },
@@ -129,3 +132,21 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
+
+
+
+
+EMAIL_USE_TLS = False 
+EMAIL_HOST = 'smtp.gmail.com' 
+EMAIL_HOST_USER = 'sumanymca@gmail.com'
+EMAIL_HOST_PASSWORD = 'sumanymca'
+EMAIL_PORT = 500
+DEFAULT_FROM_EMAIL = 'sumanymca@gmail.com'
+SERVER_EMAIL = 'sumanymca@gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# ADMINS = [
+#     ('Vijaydeep Sharma', 'vijaydeep@sudofire.com'),
+#     ('Vivek Sharma', 'vivek@sudofire.com'),
+#     ('Suman singh','sumanymca@gmail.com'),
+# ]
