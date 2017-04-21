@@ -240,3 +240,10 @@ class ShowCampaignView(generic.ListView):
 
 	def get_queryset(self):
 		return Campaign.objects.filter(user=self.request.user)
+
+
+class UserProfileView(generic.ListView):
+	template_name ='chimp/user_profile.html'
+
+	def get_queryset(self):
+		return UserProfile.objects.filter(user=self.request.user)

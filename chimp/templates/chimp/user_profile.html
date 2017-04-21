@@ -1,0 +1,16 @@
+{% load staticfiles %}
+
+{% load static %}
+{{ form.media }}
+
+{{userprofile_list}}
+
+{% for user in userprofile_list %}
+<h3>USER ID : {{ user.id }}<h3>
+<h3>USER NAME : {{ user.user }}<h3>
+<h3>SENT EMAILS : {{ user.sent_email }}<h3>
+<h3>REMAINING EMAILS : {{ user.remaining_email }}<h3>
+<h3>BUSINESS NAME : {{ user.business_name }}<h3>
+<h3>PACKAGE : {{ user.package }}<h3>
+<h3>EMAIL ID  : {{ user.email }}<h3>
+{%  endfor %}
