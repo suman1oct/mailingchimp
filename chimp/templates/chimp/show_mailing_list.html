@@ -1,0 +1,13 @@
+{% load staticfiles %}
+
+{% load static %}
+{{ form.media }}
+
+
+<h1>MAILING_LIST</h1>
+{{mailinglist_list}}
+<br>
+	{% for mailing_list in mailinglist_list %}
+		<h3>{{mailing_list.name}}</h3>
+
+	{% endfor %}

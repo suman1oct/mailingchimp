@@ -1,0 +1,15 @@
+{% load staticfiles %}
+
+{% load static %}
+{{ form.media }}
+
+<h1>Templates </h1>
+
+		{% for template in templatelist_list %}
+			<strong>{{template.template_name}}<strong><br>
+			<img src={{MEDIA_URL}}{{template.image}} height=150px width=300px><br>
+			<h2>{{template.template_name}}</h2>
+			<h2>{{template.category}}</h2>
+			
+
+		{% endfor %}

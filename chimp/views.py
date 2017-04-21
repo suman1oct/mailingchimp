@@ -1,10 +1,8 @@
+
 from django.views import generic
-from django.views.generic import View
-from django.http import HttpResponse
 from django.contrib.auth import authenticate,login,logout
 from django import forms
 from django.shortcuts import render
-from . forms import LoginForm,RegistrationForm, AddCampaignForm
 from . forms import *
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
@@ -14,32 +12,25 @@ from . models import *
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.core.mail import send_mail
-from django.http import HttpResponse
 from django.views import View
 from openpyxl import load_workbook
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse
-
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-import re
 
-class LoginView(generic.FormView):
+
+class LoginView(generic.FormView):			# User login view
 	template_name='chimp/login.html'
 	form_class=LoginForm
-	#success_url=reverse_lazy('chimp:dashboard')
-	success_url='chimp:create'
+	success_url=reverse_lazy('chimp:dashboard')
+
 	def get(self, *args, **kwargs):
 		if self.request.user:
-			#print(self.request.user)
 			if self.request.user.is_authenticated():
 				redirect('chimp:dashboard')
-			#return redirect(self.success_url)
-			#return redirect('chimp:dashboard') 
-			#return HttpResponseRedirect("login successfully")
 		return super(LoginView, self).get(*args, **kwargs)
 		
 	def form_valid(self,form):
@@ -50,18 +41,22 @@ class LoginView(generic.FormView):
 		# pdb.set_trace()
 		if user.is_active:
 			login(self.request, user)
-			#return redirect('chimp:dashboard')
 			return redirect(self.success_url)
-class LogoutView(View):
+
+
+class LogoutView(generic.View):			# User logout view
+	
 	def get(self,request):
 		logout(request)
 		messages.success(request, 'logout successfully')
 		return redirect('chimp:login')
 
-class RegistrationView(generic.FormView):
+
+class RegistrationView(generic.FormView):		# User sign up view
 	template_name='chimp/registration.html'
 	form_class=RegistrationForm
 	success_url=reverse_lazy('chimp:dashboard')
+	
 	def form_valid(self,form):
 		username=form.cleaned_data.get('username')
 		name =form.cleaned_data.get('name')
@@ -69,30 +64,32 @@ class RegistrationView(generic.FormView):
 		business_name =form.cleaned_data.get('business_name')
 		email=form.cleaned_data.get('email')
 		package=form.cleaned_data.get('package')
+		
 		try:
 			user=User(username=username, first_name=name,email=email)
-			if User.objects.filter(username=user.username).exists():
-				messages.success(self.request,'Username already exist')
+			if User.objects.filter(username=user.username).exists(): 
+				# check whether user is not already exist
+				messages.error(self.request,'Username already exist')
 				return HttpResponse("User already exist")
 		except User.DoesNotExist:
 			pass
+		
 		user.set_password(password)
 		user.save()
-		userprofile=UserProfile(user=user,business_name=business_name,package=package)
+		userprofile=UserProfile(user=user,business_name=business_name,package=package , email=email)
 		userprofile.save()
 		messages.success(self.request, 'User Register Successfully')
 		return redirect(self.success_url)
 
-class AddView(generic.FormView):
-	# model=Campaign
-	# fields=['name','mailing_list','template']
+
+class AddCampaignView(generic.FormView):			# Create Campaign
 	template_name='chimp/create.html'
-	success_url='/admin'
-	#success_url=reverse_lazy('')
+	#success_url='/admin'
+	success_url=reverse_lazy('chimp:dashboard')
 	form_class = AddCampaignForm
 
 	def get_form_kwargs(self):
-		kwargs = super(AddView, self).get_form_kwargs()
+		kwargs = super(AddCampaignView, self).get_form_kwargs()		
 		kwargs['request'] = self.request
 		return kwargs
 
@@ -102,24 +99,23 @@ class AddView(generic.FormView):
 			campaign.user = self.request.user
 			form.save()
 			messages.success(self.request, 'Campaign created  Successfully')
-			#Campaign.save()
+			return super(AddCampaignView, self).form_valid(form, *args, **kwargs)
 
-			"""# msg_plain = render_to_string('templates/email.txt', {'some_params': some_params})
-			msg_plain = ''
-			#msg_html = render_to_string('<html><body><h1>hello</h1></body></html>')
-			msg_html = render_to_string('Campaign.objects.filter(user=self.request.user)__template_list__path')
-			receiver = ['some@receiver.com', 'some1@receiver.com', 'some2@receiver.com']
-			send_mail('email title',msg_plain, 'some@sender.com', receiver, html_message=msg_html,)
-			"""		
-		return super(AddView, self).form_valid(form, *args, **kwargs)
 
-class EditView(SuccessMessageMixin, UpdateView):
+class EditCampaignView(SuccessMessageMixin, generic.UpdateView):
 	model=Campaign
-	fields=['name','mailing_list','template']
-	template_name='chimp/edit.html'
+	form_class = EditCampaignForm
+	template_name='chimp/edit_campaign.html'
 	success_url = '/admin'
-	#success_url=reverse_lazy('')
+	#success_url=reverse_lazy('chimp:admin')
 	success_message = 'Campaign Edited Successfully'
+
+	def get_form_kwargs(self):
+		kwargs = super(EditCampaignView, self).get_form_kwargs()
+		kwargs['request'] = self.request
+		return kwargs
+
+
 
 class AddMailList(SuccessMessageMixin, CreateView):
 	model= MailingList
@@ -127,13 +123,15 @@ class AddMailList(SuccessMessageMixin, CreateView):
 	#fields = '__all__'
 	template_name = 'chimp/add_mail_list.html'
 	success_message = 'Mail list added.'
-	success_url='/admin'
+	success_url=reverse_lazy('chimp:create')
+	
 	def form_valid(self,form, *args, **kwargs):
 		if form.is_valid(): 
 			mailinglist=form.save(commit=False)
 			mailinglist.user=self.request.user
 			mailinglist.save()
 			return super(AddMailList, self).form_valid(form, *args, **kwargs)
+
 
 class AddTemplateList(SuccessMessageMixin, CreateView):
 	model=TemplateList
@@ -143,20 +141,17 @@ class AddTemplateList(SuccessMessageMixin, CreateView):
 	success_url='/admin'
 
 
-
-
-
 class SendEmailView(View):
+	
 	def get(self, request, *args, **kwargs):
-
-
-		campaign_obj=Campaign.objects.filter(user=self.request.user)[0]
+		#campaign_obj=Campaign.objects.filter(user=self.request.user)[0]
+		campaign_obj=Campaign.objects.get(id=self.kwargs['pk'])
+		u=UserProfile.objects.get(user=self.request.user)
 		print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 		print(campaign_obj.mailing_list.mailing_list_path)
 		path=campaign_obj.mailing_list.mailing_list_path
 		template_path=campaign_obj.template.path
-		#msg_plain = render_to_string('email.txt', {})
-		# wb = load_workbook(filename = 'media/uploads/excels/mailtest.xlsx')
+		
 		wb = load_workbook(filename = path)
 		sheet = wb.worksheets[0]
 		row_count = sheet.max_row
@@ -165,37 +160,36 @@ class SendEmailView(View):
 		receiver=[]
 		for i in range(2, row_count):
 			for j in range(1, column_count):
-				users_name.append(sheet.cell(row=i, column=1).value)
-				email_id=sheet.cell(row=i, column=2).value
+				email_o = sheet.cell(row=i, column=2).value
+				#import pdb; pdb.set_trace()
 				try:
-					if validate_email(email_id):
-						receiver.append(sheet.cell(row=i, column=2).value)
-				except ValidationError:
-					pass
-
-		# sent_mail=len(users_name)
-		# print("******************************sent mail*******************************")
-		# print(sent_mail)
-		# import ipdb; ipdb.set_trace()
-		u=UserProfile.objects.get(user=self.request.user)
+					validate_email(email_o)
+					receiver.append(email_o)
+					users_name.append(sheet.cell(row=i, column=1).value)
+				except ValidationError as e:
+					print('Some Invalid')
+				
+		print("**********************Remaining mail**************")
+		sent_mail=len(users_name)	# Number of count of mailing list
 		
-		print(u.sent_email)
-		# print("**************************************************************************")
-		# c=Campaign.objects.get(user=self.request.user)
-		# print(c.mailing_list.mailing_list_path)
-
-
-		#msg_html = render_to_string('chimp/mail2.html', {})
-		import os
+		"""import os
 		with open(os.getcwd()+template_path.url) as temp_file:
 			content = temp_file.readlines()
-
-		print(content)
-			
-		# msg_html = render_to_string(template_path.url, {'content': self.request.user})
+		"""
+		#print(content)
 		
-		send_mail('email title','subject','sumanymca@gmail.com',receiver,html_message=str(content),)
-		return HttpResponse("Email sent succesfuly")
+		rem_mail=u.remaining_email
+		if( sent_mail < rem_mail):
+			msg_html = render_to_string(template_path, {'content': self.request.user})
+			send_mail('email title','subject',u.email,receiver,html_message=msg_html,)
+			total_sent_email=u.sent_email+sent_mail
+			total_remaining_email=u.remaining_email-sent_mail
+			u.sent_email=total_sent_email
+			u.remaining_email=total_remaining_email
+			u.save()
+			return HttpResponse("Email sent succesfuly")
+		else:
+			return HttpResponse("Emails are less")
 
 class DashboardView(generic.ListView):
 	template_name='chimp/dashboard.html'
@@ -211,7 +205,38 @@ class DashboardView(generic.ListView):
 
 class HomepageView(generic.ListView):
 	template_name='chimp/homepage.html'
+	
 	def get_queryset(self):
 		return TemplateList.objects.all()
 
+class CampaignDetailView(generic.DetailView):
+	template_name = 'chimp/campaign_detail.html'
+	model = Campaign
 
+	def get_object(self):
+		# Call the superclass
+		object = super(CampaignDetailView, self).get_object()
+		# Record the last accessed date
+		object.last_accessed = timezone.now()
+		object.save()
+		# Return the object
+		return object
+
+class ShowTemplateView(generic.ListView):
+	template_name='chimp/show_template.html'
+	model=TemplateList
+
+	def get_queryset(self):
+		return TemplateList.objects.all()
+
+class ShowMailingListView(generic.ListView):
+	template_name='chimp/show_mailing_list.html'
+
+	def get_queryset(self):
+		return MailingList.objects.filter(user=self.request.user)
+
+class ShowCampaignView(generic.ListView):
+	template_name='chimp/show_campaign.html'
+
+	def get_queryset(self):
+		return Campaign.objects.filter(user=self.request.user)

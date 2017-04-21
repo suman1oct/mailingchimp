@@ -1,0 +1,14 @@
+{% load staticfiles %}
+
+{% load static %}
+{{ form.media }}
+
+<h1>Campaign Record</h1>
+{% for campaign in campaign_list %}
+	<h2> {{ campaign.id }} <h2>
+	<a href="{% url 'chimp:campaign_detail' campaign.id %}"><h2> {{campaign.name}} </h2></a>
+	<h2> {{campaign.created_date}} </h2>
+	<a href="{% url 'chimp:edit' campaign.id %}">EDIT</a>
+	<hr><hr>
+	
+{% endfor %}
