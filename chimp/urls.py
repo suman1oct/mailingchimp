@@ -18,6 +18,7 @@ urlpatterns=[
 	url(r'^show-templates/', views.ShowTemplateView.as_view(), name='show_templates'),
 	url(r'^show-mailing-list/', views.ShowMailingListView.as_view(), name='show_mailing_list'),
 	url(r'^show-campaign/', views.ShowCampaignView.as_view(), name='show_campaign'),
-	url(r'^user-profile/', views.UserProfileView.as_view(), name='user_profile')
+	url(r'^user-profile/', views.UserProfileView.as_view(), name='user_profile'),
+	url(r'^delete-campaign/(?P<pk>[0-9]+)/', views.DeleteCampaignView.as_view(), name='delete_campaign'),
 	
 ]	

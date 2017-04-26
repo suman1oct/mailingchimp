@@ -9,6 +9,8 @@
 	<a href="{% url 'chimp:campaign_detail' campaign.id %}"><h2> {{campaign.name}} </h2></a>
 	<h2> {{campaign.created_date}} </h2>
 	<a href="{% url 'chimp:edit' campaign.id %}">EDIT</a>
+	<br>
+	<a href="{% url 'chimp:delete_campaign' campaign.id %}">Delete</a>
 	<hr><hr>
 	
 {% endfor %}

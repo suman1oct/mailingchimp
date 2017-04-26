@@ -4,11 +4,11 @@ from django.contrib.auth.models import User
 from .models import UserProfile
 from .choices import PACKAGE_CHOICES
 from .models import Campaign, MailingList
-
+from .validation import validate_fullname
 
 class LoginForm(forms.Form):					# User Login Form
-	username =forms.CharField(max_length=100)
-	password=forms.CharField(widget=forms.PasswordInput())
+	username =forms.CharField(max_length=100,widget=forms.TextInput(attrs={'placeholder': 'User name'}))
+	password=forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
 
 	def clean(self):
 		username = self.cleaned_data.get('username')
@@ -20,11 +20,11 @@ class LoginForm(forms.Form):					# User Login Form
 
 class RegistrationForm(forms.Form):				# User Sign Up Form
 	username =forms.CharField(max_length=100)
-	name =forms.CharField(max_length=100)
+	name =forms.CharField(max_length=100, validators=[validate_fullname])
 	password=forms.CharField(widget=forms.PasswordInput())
 	business_name=forms.CharField(max_length=100)
 	email=forms.CharField(widget=forms.EmailInput())
-	package=forms.CharField(max_length=10,widget=forms.Select(choices=PACKAGE_CHOICES),)
+	package=forms.CharField(max_length=10,label='Package',widget=forms.Select(choices=PACKAGE_CHOICES),)
 	
 	def clean(self):
 		username = self.cleaned_data.get('username')

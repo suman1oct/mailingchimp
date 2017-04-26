@@ -5,7 +5,7 @@
 
 <div><center><h2>DASHBOARD</h2></center></div>
 {% for campaign in campaign_list %}
-USER: {{campaign.user}}<br>
+USER: {{campaign.user.get_full_name}}<br>
 CAMPAIGN NAME: {{campaign.name}}<br>
 CREATED DATE: {{campaign.created_date}}<br>
 MAILING LIST:  {{campaign.mailing_list}}<br>

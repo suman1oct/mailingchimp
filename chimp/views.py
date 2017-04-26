@@ -55,7 +55,7 @@ class LogoutView(generic.View):			# User logout view
 class RegistrationView(generic.FormView):		# User sign up view
 	template_name='chimp/registration.html'
 	form_class=RegistrationForm
-	success_url=reverse_lazy('chimp:dashboard')
+	success_url=reverse_lazy('chimp:login')
 	
 	def form_valid(self,form):
 		username=form.cleaned_data.get('username')
@@ -64,9 +64,10 @@ class RegistrationView(generic.FormView):		# User sign up view
 		business_name =form.cleaned_data.get('business_name')
 		email=form.cleaned_data.get('email')
 		package=form.cleaned_data.get('package')
+		first_name, last_name = name.split()
 		
 		try:
-			user=User(username=username, first_name=name,email=email)
+			user=User(username=username, first_name=first_name, last_name=last_name, email=email)
 			if User.objects.filter(username=user.username).exists(): 
 				# check whether user is not already exist
 				messages.error(self.request,'Username already exist')
@@ -167,7 +168,8 @@ class SendEmailView(View):
 					receiver.append(email_o)
 					users_name.append(sheet.cell(row=i, column=1).value)
 				except ValidationError as e:
-					print('Some Invalid')
+					print(sheet.cell(row=i, column=1).value + " is invalid email id\n")
+					
 				
 		print("**********************Remaining mail**************")
 		sent_mail=len(users_name)	# Number of count of mailing list
@@ -196,6 +198,7 @@ class DashboardView(generic.ListView):
 	model=Campaign
 
 	def get(self, *args, **kwargs):
+		#import ipdb; ipdb.set_trace()
 		if not self.request.user.is_authenticated():
 			return redirect('chimp:login')
 		return super(DashboardView, self).get(*args, **kwargs)
@@ -247,3 +250,9 @@ class UserProfileView(generic.ListView):
 
 	def get_queryset(self):
 		return UserProfile.objects.filter(user=self.request.user)
+
+
+class DeleteCampaignView(generic.DeleteView):
+	model=Campaign
+	template_name='chimp/delete_campaign.html'
+	success_url = reverse_lazy('chimp:show_campaign')
