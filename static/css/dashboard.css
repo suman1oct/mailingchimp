@@ -1,0 +1,34 @@
+/* dashboard font size */
+.ttl {
+    font-size: 40px;
+}
+.ussps {
+    vertical-align: text-bottom;
+    margin-right: 10px;
+    color: #FF9800;
+}
+/* for spsce with icons */
+.sps{
+    margin-right: 10px;
+    color: #FF9800;
+}
+
+.back img {
+    width:100%;
+    height: 89vh;
+}
+
+.start {
+    text-align: center;
+    position: absolute;
+    top: 0px;
+}
+
+.start button {
+    font-size: 35px;
+    height: 60px;
+    padding: 10px;
+    position: relative;
+    margin-top: 60vh;
+    margin-left: 35vw;
+}
