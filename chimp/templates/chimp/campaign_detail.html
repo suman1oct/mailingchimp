@@ -55,11 +55,10 @@
 					<div class="container">
 						<div class="col-lg-8 col-lg-offset-2" style="margin-top:30px;">
 							<div class="demo-card-event mdl-card mdl-shadow--2dp text-center" style="width: 100%;">
-								<div class="mdl-card--expand" style="color:#fff;padding:18px;">
+								<div class="mdl-card--expand" style="color:#fff;padding:18px;margin-top: 25px;}">
                                     <img src="{{MEDIA_URL}}{{ object.template.image }}" height=100px width=200px><br>
                                     <h4> Campaign Id : {{ object.id }}<h4>
-                                    <h4> User Name : {{ object.user }}</h4>
-                                    <h4> Name : {{ object.name.fullname }}</h4>
+                                    <h4> Campaign Name : {{ object.name }}</h4>
                                     <h4> Created Date : {{ object.created_date| date:'d M Y' }}</h4>
                                     <H4> Mailing List : {{ object.mailing_list.name }}</H4>
                                     <h4> Template Name : {{ object.template.template_name}}</h4>

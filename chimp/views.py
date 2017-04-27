@@ -30,7 +30,7 @@ class LoginView(generic.FormView):			# User login view
 	def get(self, *args, **kwargs):
 		if self.request.user:
 			if self.request.user.is_authenticated():
-				redirect('chimp:dashboard')
+				return redirect('chimp:dashboard')
 		return super(LoginView, self).get(*args, **kwargs)
 
 	def form_valid(self,form):
@@ -196,7 +196,8 @@ class SendEmailView(View):
 			messages.success(self.request, 'Email sent successfully')
 			return redirect('chimp:show_campaign')
 		else:
-			return HttpResponse("Emails are less")
+			messages.success(self.request, 'Remaining count is less then the recipient in mailing list')
+			return redirect('chimp:show_campaign')
 
 class DashboardView(generic.ListView):
 	template_name='chimp/dashboard.html'
@@ -258,6 +259,11 @@ class UserProfileView(generic.ListView):
 
 
 class DeleteCampaignView(generic.DeleteView):
-	model=Campaign
-	template_name='chimp/delete_campaign.html'
+	model = Campaign
+	template_name = 'chimp/delete_campaign.html'
 	success_url = reverse_lazy('chimp:show_campaign')
+
+class DeleteMailingListView(generic.DeleteView):
+	model = MailingList
+	template_name = 'chimp/delete_mailing_list.html'
+	success_url = reverse_lazy('chimp:show_mailing_list')

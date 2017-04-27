@@ -19,11 +19,11 @@ class LoginForm(forms.Form):					# User Login Form
 		return self.cleaned_data
 
 class RegistrationForm(forms.Form):				# User Sign Up Form
-	username =forms.CharField(max_length=100)
-	name =forms.CharField(max_length=100, validators=[validate_fullname])
-	password=forms.CharField(widget=forms.PasswordInput())
-	business_name=forms.CharField(max_length=100)
-	email=forms.CharField(widget=forms.EmailInput())
+	username =forms.CharField(max_length=100,widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+	name =forms.CharField(max_length=100, validators=[validate_fullname],widget=forms.TextInput(attrs={'placeholder': 'Name'}))
+	password=forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
+	business_name=forms.CharField(max_length=100,widget=forms.TextInput(attrs={'placeholder': 'Bussiness Name'}))
+	email=forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'Email'}))
 	package=forms.CharField(max_length=10,label='Package',widget=forms.Select(choices=PACKAGE_CHOICES),)
 
 	def clean(self):

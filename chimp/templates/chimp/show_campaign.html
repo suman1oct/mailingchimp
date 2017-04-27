@@ -67,9 +67,16 @@
 									<a href="{% url 'chimp:edit' campaign.id %}">
 										<button type="button" name="button" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color:#fff;">Edit</button>
 									</a>
+                                    <a href="{% url 'chimp:delete_campaign' campaign.id %}">
+										<button type="button" name="button" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color:#fff;">Delete</button>
+									</a>
 								</div>
 							</div>
 						</div>
+                        {% empty %}
+                        <div class="col-lg-12 text-center" style="margin-top:40vh;">
+                            <h1>Nothing Here..</h1>
+                        </div>
 						{% endfor %}
 					</div>
                 </div>
