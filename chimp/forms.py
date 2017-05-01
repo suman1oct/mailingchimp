@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from .models import UserProfile
 from .choices import PACKAGE_CHOICES
 from .models import Campaign, MailingList
-from .validation import validate_fullname
+from .validation import validate_fullname ,validateEmail
 
 class LoginForm(forms.Form):					# User Login Form
 	username =forms.CharField(max_length=100,widget=forms.TextInput(attrs={'placeholder': 'User name'}))
@@ -19,11 +19,11 @@ class LoginForm(forms.Form):					# User Login Form
 		return self.cleaned_data
 
 class RegistrationForm(forms.Form):				# User Sign Up Form
-	username =forms.CharField(max_length=100)
-	name =forms.CharField(max_length=100, validators=[validate_fullname])
-	password=forms.CharField(widget=forms.PasswordInput())
-	business_name=forms.CharField(max_length=100)
-	email=forms.CharField(widget=forms.EmailInput())
+	username =forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'User name'}))
+	name =forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Name'}))
+	password=forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
+	business_name=forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Business'}))
+	email=forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'email id'}), validators=[validateEmail])
 	package=forms.CharField(max_length=10,label='Package',widget=forms.Select(choices=PACKAGE_CHOICES),)
 	
 	def clean(self):
@@ -73,3 +73,4 @@ class EditCampaignForm(forms.ModelForm):		# for edit the existing campaign of sp
 	class Meta:
 		model = Campaign
 		fields = ['name','mailing_list','template']
+		

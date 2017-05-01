@@ -2,13 +2,12 @@
 from django.views import generic
 from django.contrib.auth import authenticate,login,logout
 from django import forms
-from django.shortcuts import render
-from . forms import *
+from django.shortcuts import render , redirect
+from . forms import LoginForm, RegistrationForm, EmailForm, AddCampaignForm, EditCampaignForm
 from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
-from . models import *
+from . models import MailingList, TemplateList, Campaign, UserProfile
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -16,10 +15,10 @@ from django.views import View
 from openpyxl import load_workbook
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
-from django.http import HttpResponse
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.utils import timezone
+
 
 
 class LoginView(generic.FormView):			# User login view
@@ -37,22 +36,20 @@ class LoginView(generic.FormView):			# User login view
 		username =form.cleaned_data.get('username')
 		password=form.cleaned_data.get('password')
 		user=authenticate(username=username,password=password)
-		# import pdb
-		# pdb.set_trace()
 		if user.is_active:
 			login(self.request, user)
 			return redirect(self.success_url)
 
 
-class LogoutView(generic.View):			# User logout view
-	
+class LogoutView(generic.View):			
+
 	def get(self,request):
 		logout(request)
 		messages.success(request, 'logout successfully')
 		return redirect('chimp:login')
 
 
-class RegistrationView(generic.FormView):		# User sign up view
+class RegistrationView(generic.FormView):		
 	template_name='chimp/registration.html'
 	form_class=RegistrationForm
 	success_url=reverse_lazy('chimp:login')
@@ -69,25 +66,34 @@ class RegistrationView(generic.FormView):		# User sign up view
 		business_name =form.cleaned_data.get('business_name')
 		email=form.cleaned_data.get('email')
 		package=form.cleaned_data.get('package')
-		first_name, last_name = name.split()
-
+		first_name=name.split()[0]
+		last_name = ''
+	
+		try:
+			last_name=name.split()[1]
+		except:
+			pass
+	
 		user=User(username=username, first_name=first_name, last_name=last_name, email=email)
 		if User.objects.filter(username=user.username).exists():
-			# check whether user is not already exist
+			"""
+			check whether user is not already exist
+			"""
 			messages.error(self.request,'Username already exist')
 			return HttpResponse("User already exist")
-		
+				
 		user.set_password(password)
 		user.save()
 		userprofile=UserProfile(user=user,business_name=business_name,package=package , email=email)
 		userprofile.save()
 		messages.success(self.request, 'User Register Successfully')
 		return redirect(self.success_url)
+			
 
 
-class AddCampaignView(generic.FormView):			# Create Campaign
+
+class AddCampaignView(generic.FormView):			
 	template_name='chimp/create.html'
-	#success_url='/admin'
 	success_url=reverse_lazy('chimp:dashboard')
 	form_class = AddCampaignForm
 
@@ -109,8 +115,7 @@ class EditCampaignView(SuccessMessageMixin, generic.UpdateView):
 	model=Campaign
 	form_class = EditCampaignForm
 	template_name='chimp/edit_campaign.html'
-	success_url = '/admin'
-	#success_url=reverse_lazy('chimp:admin')
+	success_url = reverse_lazy('chimp:show_campaign')
 	success_message = 'Campaign Edited Successfully'
 
 	def get_form_kwargs(self):
@@ -132,7 +137,17 @@ class AddMailList(SuccessMessageMixin, CreateView):
 		if form.is_valid(): 
 			mailinglist=form.save(commit=False)
 			mailinglist.user=self.request.user
-			mailinglist.save()
+			file_type = self.request.FILES['mailing_list_path'].content_type
+			mime_type_list=['application/vnd.ms-excel','application/msexcel','application/x-msexcel','application/x-ms-excel','application/x-excel','application/x-dos_ms_excel','application/xls','application/x-xls','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-excel.sheet.binary.macroEnabled.12','application/vnd.openxmlformats-officedocument.spreadsheetml.template',]
+			
+			try:
+				if(file_type in mime_type_list):
+					mailinglist.save()
+				else:
+					return HttpResponse("wrong file format")
+			except:
+				raise forms.ValidationError('Wrong file format')
+
 			return super(AddMailList, self).form_valid(form, *args, **kwargs)
 
 
@@ -147,45 +162,37 @@ class AddTemplateList(SuccessMessageMixin, CreateView):
 class SendEmailView(View):
 	
 	def get(self, request, *args, **kwargs):
-		#campaign_obj=Campaign.objects.filter(user=self.request.user)[0]
 		campaign_obj=Campaign.objects.get(id=self.kwargs['pk'])
 		u=UserProfile.objects.get(user=self.request.user)
 		print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 		print(campaign_obj.mailing_list.mailing_list_path)
 		path=campaign_obj.mailing_list.mailing_list_path
-		template_path=campaign_obj.template.path
+		template_path=campaign_obj.template.file
+		campaign_name=campaign_obj.name
 		
 		wb = load_workbook(filename = path)
 		sheet = wb.worksheets[0]
 		row_count = sheet.max_row
 		column_count = sheet.max_column
 		users_name=[]
-		receiver=[]
+		receivers=[]
 		for i in range(2, row_count):
 			for j in range(1, column_count):
 				email_o = sheet.cell(row=i, column=2).value
-				#import pdb; pdb.set_trace()
 				try:
 					validate_email(email_o)
-					receiver.append(email_o)
+					receivers.append(email_o)
 					users_name.append(sheet.cell(row=i, column=1).value)
 				except ValidationError as e:
 					print(sheet.cell(row=i, column=1).value + " is invalid email id\n")
 					
-				
-		print("**********************Remaining mail**************")
 		sent_mail=len(users_name)	# Number of count of mailing list
-		
-		"""import os
-		with open(os.getcwd()+template_path.url) as temp_file:
-			content = temp_file.readlines()
-		"""
-		#print(content)
 		
 		rem_mail=u.remaining_email
 		if( sent_mail < rem_mail):
 			msg_html = render_to_string(template_path, {'content': self.request.user})
-			send_mail('email title','subject',u.email,receiver,html_message=msg_html,)
+			for receiver in receivers:
+				send_mail(campaign_name, '', u.email, [receiver], html_message=msg_html,)
 			total_sent_email=u.sent_email+sent_mail
 			total_remaining_email=u.remaining_email-sent_mail
 			u.sent_email=total_sent_email
@@ -258,3 +265,31 @@ class DeleteCampaignView(generic.DeleteView):
 	model=Campaign
 	template_name='chimp/delete_campaign.html'
 	success_url = reverse_lazy('chimp:show_campaign')
+
+	def delete(self, request, *args, **kwargs):
+		"""
+		Calls the delete() method on the fetched object and then
+		redirects to the success URL.
+		"""
+		self.object = self.get_object()
+		success_url = self.get_success_url()
+		self.object.delete()
+		messages.success(request, 'Campaign Deleted Successfully')
+		return HttpResponseRedirect(success_url)
+
+
+class DeleteMailingListView(generic.DeleteView):
+	model=Campaign
+	template_name='chimp/delete_mailing_list.html'
+	success_url = reverse_lazy('chimp:show_mailing_list')
+
+	def delete(self, request, *args, **kwargs):
+		"""
+		Calls the delete() method on the fetched object and then
+		redirects to the success URL.
+		"""
+		self.object = self.get_object()
+		success_url = self.get_success_url()
+		self.object.delete()
+		messages.success(request, 'Mailing List Deleted Successfully')
+		return HttpResponseRedirect(success_url)

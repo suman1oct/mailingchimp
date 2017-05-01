@@ -6,18 +6,18 @@ from .choices import PACKAGE_CHOICES,CATEGORY_CHOICES
 class MailingList(models.Model):
 	name=models.CharField(max_length=100)
 	user=models.ForeignKey('auth.User', on_delete=models.CASCADE)
-	mailing_list_path=models.FileField(upload_to='uploads/excels/')
+	mailing_list_path=models.FileField(upload_to='excels/')
 	
 	def __str__(self):
 		return self.name
 
 
 class TemplateList(models.Model):
-	image=models.ImageField(upload_to='uploads/')
+	image=models.ImageField(upload_to='images/')
 	template_name=models.CharField(max_length=100)
 	#category=models.ForeignKey(Category,on_delete=models.CASCADE,null=True)
 	category=models.CharField(max_length=10, choices=CATEGORY_CHOICES, null=False)
-	path=models.FileField(upload_to='uploads/')
+	file=models.FileField(upload_to='templates/')
 	
 	def __str__(self):
 		return self.template_name
