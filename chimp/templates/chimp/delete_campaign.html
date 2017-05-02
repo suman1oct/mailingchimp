@@ -41,12 +41,11 @@
                     </nav>
                 </div>
             </header>
-            <div class="mdl-layout__drawer text-center" style="padding-top:20px;">
-                <a href="{% url 'chimp:user_profile' %}">
-                    <span class="mdl-layout-title"><i class="material-icons ussps" >face</i>{{ request.user }}</span>
-                </a>
+            <div class="mdl-layout__drawer text-left" style="padding-top:20px;">
+                <span class="mdl-layout-title"><i class="material-icons ussps" >face</i>{{ request.user.first_name }}</span>
                 <hr>
                 <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" href="{% url 'chimp:user_profile' %}"><i class="material-icons sps">account_circle</i>Profile</a>
                     <a class="mdl-navigation__link" href="{% url 'chimp:show_campaign' %}" style=" text-decoration: none;"><i class="material-icons sps">extension</i>Campaigns</a>
                     <a class="mdl-navigation__link" href="{% url 'chimp:show_templates' %}" style=" text-decoration: none;"><i class="material-icons sps">palette</i> Templates</a>
                     <a class="mdl-navigation__link" href="{% url 'chimp:show_mailing_list' %}" style=" text-decoration: none;"><i class="material-icons sps">contact_mail</i> Mailing-lists</a>
@@ -60,7 +59,7 @@
 								<div class="mdl-card--expand text-left" style="color:#fff;padding:18px;">
                                     <form class="text-center" action="" method="post">{% csrf_token %}
                                         <h1 style="color: white;margin: 55px;">Are you sure you want to delete "{{ object }}"?</h1>
-                                        <input class="btn btn-warning" type="submit" value="Confirm" />
+                                        <input class="btn btn-warning btn-lg" type="submit" value="Confirm" />
                                     </form>
 								</div>
 							</div>

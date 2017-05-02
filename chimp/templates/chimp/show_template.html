@@ -41,11 +41,11 @@
                     </nav>
                 </div>
             </header>
-            <div class="mdl-layout__drawer text-center" style="padding-top:20px;">
-                <a href="{% url 'chimp:user_profile' %}">
-                    <span class="mdl-layout-title"><i class="material-icons ussps" >face</i>{{ request.user }}</span>
+            <div class="mdl-layout__drawer text-left" style="padding-top:20px;">
+                <span class="mdl-layout-title"><i class="material-icons ussps" >face</i>{{ request.user.first_name }}</span>
                 <hr>
                 <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" href="{% url 'chimp:user_profile' %}" style=" text-decoration: none;"><i class="material-icons sps">account_circle</i>Profile</a>
                     <a class="mdl-navigation__link" href="{% url 'chimp:show_campaign' %}" style=" text-decoration: none;"><i class="material-icons sps">extension</i>Campaigns</a>
                     <a class="mdl-navigation__link" href="{% url 'chimp:show_templates' %}" style=" text-decoration: none;"><i class="material-icons sps">palette</i> Templates</a>
                     <a class="mdl-navigation__link" href="{% url 'chimp:show_mailing_list' %}" style=" text-decoration: none;"><i class="material-icons sps">contact_mail</i> Mailing-lists</a>
@@ -65,7 +65,12 @@
 										<h4 style="margin:0px;">Category : {{template.category}}</h4>
 									</div>
 									<div class="mdl-card__actions mdl-card--border">
-										<button type="button" name="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" data-toggle="modal" data-target="#temp-pic-{{template}}">View</button>
+										<button type="button" name="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" data-toggle="modal" data-target="#temp-pic-{{template}}" id="view-button">View</button>
+                                        <a href="{% url 'chimp:create' %}">
+                                            <button data-template-id="{{template.id}}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect select-temp">
+                                                Select
+                                            </button>
+                                        </a>
 									</div>
 								</div>
 							</div>
@@ -88,5 +93,6 @@
             </div>
         </div>
         {% endfor %}
+        <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
     </body>
 </html>

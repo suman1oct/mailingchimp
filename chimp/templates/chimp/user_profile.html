@@ -40,12 +40,12 @@
                     </nav>
                 </div>
             </header>
-            <div class="mdl-layout__drawer text-center" style="padding-top:20px;">
-                <a href="{% url 'chimp:user_profile' %}">
-                    <span class="mdl-layout-title"><i class="material-icons ussps" >face</i>{{ request.user }}</span>
+            <div class="mdl-layout__drawer text-left" style="padding-top:20px;">
+                <span class="mdl-layout-title"><i class="material-icons ussps" >face</i>{{ request.user.first_name }}</span>
                 </a>
                 <hr>
                 <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" href="{% url 'chimp:user_profile' %}"><i class="material-icons sps">account_circle</i>Profile</a>
                     <a class="mdl-navigation__link" href="{% url 'chimp:show_campaign' %}" style=" text-decoration: none;"><i class="material-icons sps">extension</i>Campaigns</a>
                     <a class="mdl-navigation__link" href="{% url 'chimp:show_templates' %}" style=" text-decoration: none;"><i class="material-icons sps">palette</i> Templates</a>
                     <a class="mdl-navigation__link" href="{% url 'chimp:show_mailing_list' %}" style=" text-decoration: none;"><i class="material-icons sps">contact_mail</i> Mailing-lists</a>
@@ -55,19 +55,23 @@
                 <div class="page-content">
 					<div class="container">
 						<div class="col-lg-8 col-lg-offset-2" style="margin-top:30px;">
-							<div class="demo-card-event mdl-card mdl-shadow--2dp text-center" style="width: 100%;">
-								<div class="mdl-card--expand text-left" style="color:#fff;padding:18px;">
+							<div class="demo-card-event mdl-card mdl-shadow--2dp col-lg-12" style="width: 100%;">
+								<div class="mdl-card--expand text-left col-lg-9 col-lg-offset-3" style="color:#fff;padding:18px;margin-top: 20px;">
                                     {% for user in userprofile_list %}
-                                    <h3>USER ID : {{ user.id }}<h3>
                                     <h3>USER NAME : {{ user.user }}<h3>
-                                    <h3>NAME : {{request.user.get_full_name}}<h3>
                                     <h3>SENT EMAILS : {{ user.sent_email }}<h3>
                                     <h3>REMAINING EMAILS : {{ user.remaining_email }}<h3>
                                     <h3>BUSINESS NAME : {{ user.business_name }}<h3>
-                                    <h3>PACKAGE : {{ user.package }}<h3>
                                     <h3>EMAIL ID  : {{ user.email }}<h3>
                                     {%  endfor %}
 								</div>
+                                <div class="text-center col-lg 12">
+                                    <a href="{% url 'chimp:dashboard' %}">
+                                        <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" style="margin-top: 20px;">
+                                            Edit Profile
+                                        </button>
+                                    </a>
+                                </div>
 							</div>
 						</div>
 					</div>

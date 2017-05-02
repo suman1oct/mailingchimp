@@ -40,11 +40,11 @@
                     </nav>
                 </div>
             </header>
-            <div class="mdl-layout__drawer text-center" style="padding-top:20px;">
-                <a href="{% url 'chimp:user_profile' %}">
-                    <span class="mdl-layout-title"><i class="material-icons ussps" >face</i>{{ request.user }}</span>
+            <div class="mdl-layout__drawer text-left" style="padding-top:20px;">
+                <span class="mdl-layout-title"><i class="material-icons ussps" >face</i>{{ request.user.first_name }}</span>
                 <hr>
                 <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" href="{% url 'chimp:user_profile' %}"><i class="material-icons sps">account_circle</i>Profile</a>
                     <a class="mdl-navigation__link" href="{% url 'chimp:show_campaign' %}"><i class="material-icons sps">extension</i>Campaigns</a>
                     <a class="mdl-navigation__link" href="{% url 'chimp:show_templates' %}"><i class="material-icons sps">palette</i> Templates</a>
                     <a class="mdl-navigation__link" href="{% url 'chimp:show_mailing_list' %}"><i class="material-icons sps">contact_mail</i> Mailing-lists</a>
@@ -52,6 +52,30 @@
             </div>
             <main class="mdl-layout__content">
                 <div class="page-content">
+                    {% for campaign in campaign_list %}
+                    <div class="col-lg-4" style="margin-top:30px;">
+                        <div class="demo-card-event mdl-card mdl-shadow--2dp">
+                            <div class="mdl-card--expand" style="color:#fff;padding:18px;">
+                                <h4> Campaign Name : {{ campaign.name }}</h4>
+                                <h4> Created Date : {{ campaign.created_date| date:'d M Y' }}</h4>
+                                <H4> Mailing List : {{ campaign.mailing_list.name }}</H4>
+                                <h4> Template Name : {{ campaign.template.template_name}}</h4>
+                                <h4> Template Category :  {{ campaign.template.category }}</h4>
+                            </div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <a href="{% url 'chimp:send_mail' campaign.id %}">
+                                    <button type="button" name="button" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color:#fff;">Send Emails</button>
+                                </a>
+                                <a href="{% url 'chimp:edit' campaign.id %}">
+                                    <button type="button" name="button" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color:#fff;">Edit</button>
+                                </a>
+                                <a href="{% url 'chimp:delete_campaign' campaign.id %}">
+                                    <button type="button" name="button" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color:#fff;">Delete</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
                     <div class="back">
                         <img src="{% static 'image/rsz_dashboard-compressor.jpg' %}" alt="back_image">
                     </div>
@@ -63,6 +87,7 @@
                             </button>
                         </a>
                     </div>
+                    {% endfor %}
                 </div>
             </main>
         </div>
