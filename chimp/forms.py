@@ -25,12 +25,18 @@ class RegistrationForm(forms.Form):				# User Sign Up Form
 	business_name=forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Business'}))
 	email=forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'email id'}), validators=[validateEmail])
 	package=forms.CharField(max_length=10,label='Package',widget=forms.Select(choices=PACKAGE_CHOICES),)
+<<<<<<< 7bb1ac9f3015d8fd9904d309e43e421b57e4cd38
 
+=======
+	
+	
+>>>>>>> added edit user profile
 	def clean_username(self):
 		if User.objects.filter(username=self.cleaned_data['username']).exists():
 			raise forms.ValidationError('user already exist')
 
 		return self.cleaned_data['username']
+<<<<<<< 7bb1ac9f3015d8fd9904d309e43e421b57e4cd38
 
 	def clean_email(self):
 		email = self.cleaned_data.get('email')
@@ -38,6 +44,9 @@ class RegistrationForm(forms.Form):				# User Sign Up Form
 			raise forms.ValidationError(u'Email addresses must be unique.')
 		return email
 
+=======
+	
+>>>>>>> added edit user profile
 	def clean(self):
 		username = self.cleaned_data.get('username')
 		name = self.cleaned_data.get('name')
@@ -87,7 +96,6 @@ class EditCampaignForm(forms.ModelForm):		# for edit the existing campaign of sp
 		fields = ['name','mailing_list','template']
 
 
-
 class EditUserProfileForm(forms.Form):				# User Sign Up Form
 	username =forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'User name'}))
 	name =forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Name'}))
@@ -106,3 +114,4 @@ class EditUserProfileForm(forms.Form):				# User Sign Up Form
 		business_name =  self.cleaned_data.get('business_name')
 		password = self.cleaned_data.get('password')
 		return self.cleaned_data
+

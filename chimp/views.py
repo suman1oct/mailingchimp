@@ -131,7 +131,6 @@ class AddMailList(SuccessMessageMixin, CreateView):
 	#fields = '__all__'
 	template_name = 'chimp/add_mail_list.html'
 	success_message = 'Mail list added.'
-
 	success_url=reverse_lazy('chimp:show_mailing_list')
 	
 
