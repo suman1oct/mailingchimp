@@ -32,6 +32,12 @@ class RegistrationForm(forms.Form):				# User Sign Up Form
 
 		return self.cleaned_data['username']
 
+	def clean_email(self):
+		email = self.cleaned_data.get('email')
+		if email and User.objects.filter(email=email).exists():
+			raise forms.ValidationError(u'Email addresses must be unique.')
+		return email
+
 	def clean(self):
 		username = self.cleaned_data.get('username')
 		name = self.cleaned_data.get('name')
@@ -80,24 +86,23 @@ class EditCampaignForm(forms.ModelForm):		# for edit the existing campaign of sp
 		model = Campaign
 		fields = ['name','mailing_list','template']
 
-		
+
 
 class EditUserProfileForm(forms.Form):				# User Sign Up Form
 	username =forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'User name'}))
 	name =forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Name'}))
 	password=forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
 	business_name=forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Business'}))
-	
+
 	def clean_username(self):
 		if User.objects.filter(username=self.cleaned_data['username']).exists():
 			raise forms.ValidationError('user already exist')
 
 		return self.cleaned_data['username']
-		
+
 	def clean(self):
 		username = self.cleaned_data.get('username')
 		name = self.cleaned_data.get('name')
 		business_name =  self.cleaned_data.get('business_name')
 		password = self.cleaned_data.get('password')
 		return self.cleaned_data
-
