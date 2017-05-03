@@ -3,7 +3,7 @@ from django.views import generic
 from django.contrib.auth import authenticate,login,logout
 from django import forms
 from django.shortcuts import render , redirect
-from . forms import LoginForm, RegistrationForm, EmailForm, AddCampaignForm, EditCampaignForm
+from . forms import LoginForm, RegistrationForm, EmailForm, AddCampaignForm, EditCampaignForm, EditUserProfileForm
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
@@ -131,7 +131,9 @@ class AddMailList(SuccessMessageMixin, CreateView):
 	#fields = '__all__'
 	template_name = 'chimp/add_mail_list.html'
 	success_message = 'Mail list added.'
-	success_url=reverse_lazy('chimp:create')
+
+	success_url=reverse_lazy('chimp:show_mailing_list')
+	
 
 	def form_valid(self,form, *args, **kwargs):
 		if form.is_valid():
@@ -293,3 +295,36 @@ class DeleteMailingListView(generic.DeleteView):
 		self.object.delete()
 		messages.success(request, 'Mailing List Deleted Successfully')
 		return HttpResponseRedirect(success_url)
+
+
+
+class EditUserProfileView(generic.FormView):		
+	template_name='chimp/edit_user_profile.html'
+	form_class=EditUserProfileForm
+	success_url=reverse_lazy('chimp:dashboard')
+
+	def form_valid(self,form):
+		username = form.cleaned_data.get('username')
+		name =form.cleaned_data.get('name')
+		password=form.cleaned_data.get('password')
+		business_name =form.cleaned_data.get('business_name')
+		first_name=name.split()[0]
+		last_name = ''
+	
+		try:
+			last_name=name.split()[1]
+		except:
+			pass
+	
+		u = UserProfile.objects.get(user=self.request.user)
+		u.business_name=business_name
+		u.password=password
+		u.business_name=business_name
+		u.save()
+
+		self.request.user.first_name = first_name
+		self.request.user.last_name = last_name
+		self.request.user.save()
+		messages.success(self.request,'User Profile Edited successfully')
+		return redirect(self.success_url)
+

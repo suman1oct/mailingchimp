@@ -3,10 +3,20 @@ from django.utils import timezone
 from .choices import PACKAGE_CHOICES,CATEGORY_CHOICES
 
 
+
+import uuid
+import os
+
+def get_file_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), ext)
+    return os.path.join('excels/', filename)
+
+
 class MailingList(models.Model):
 	name=models.CharField(max_length=100)
 	user=models.ForeignKey('auth.User', on_delete=models.CASCADE)
-	mailing_list_path=models.FileField(upload_to='excels/')
+	mailing_list_path=models.FileField(upload_to=get_file_path)
 	
 	def __str__(self):
 		return self.name

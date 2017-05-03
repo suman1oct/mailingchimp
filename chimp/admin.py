@@ -6,7 +6,7 @@ from .models import MailingList, TemplateList, Campaign, UserProfile
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-	list_display = ('user', 'sent_email', 'remaining_email', 'business_name', 'package')
+	list_display = ('id','user', 'sent_email', 'remaining_email', 'business_name', 'package')
 	search_fields = ('user__first_name','user__last_name')
 	list_filter=['user__first_name']
 
