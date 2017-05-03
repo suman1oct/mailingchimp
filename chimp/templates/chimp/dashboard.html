@@ -51,30 +51,30 @@
                 </nav>
             </div>
             <main class="mdl-layout__content">
-                <div class="page-content">
-                    {% for campaign in campaign_list %}
-                    <div class="col-lg-4" style="margin-top:30px;">
-                        <div class="demo-card-event mdl-card mdl-shadow--2dp">
-                            <div class="mdl-card--expand" style="color:#fff;padding:18px;">
-                                <h4> Campaign Name : {{ campaign.name }}</h4>
-                                <h4> Created Date : {{ campaign.created_date| date:'d M Y' }}</h4>
-                                <H4> Mailing List : {{ campaign.mailing_list.name }}</H4>
-                                <h4> Template Name : {{ campaign.template.template_name}}</h4>
-                                <h4> Template Category :  {{ campaign.template.category }}</h4>
-                            </div>
-                            <div class="mdl-card__actions mdl-card--border">
-                                <a href="{% url 'chimp:send_mail' campaign.id %}">
-                                    <button type="button" name="button" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color:#fff;">Send Emails</button>
-                                </a>
-                                <a href="{% url 'chimp:edit' campaign.id %}">
-                                    <button type="button" name="button" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color:#fff;">Edit</button>
-                                </a>
-                                <a href="{% url 'chimp:delete_campaign' campaign.id %}">
-                                    <button type="button" name="button" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color:#fff;">Delete</button>
-                                </a>
+                <div class="page-content col-lg-12">
+                        {% for campaign in campaign_list %}
+                        <div class="col-lg-4" style="margin-top:30px;">
+                            <div class="demo-card-event mdl-card mdl-shadow--2dp" style="margin: 0px auto;">
+                                <div class="mdl-card--expand" style="color:#fff;padding:18px;">
+                                    <h4> Campaign Name : {{ campaign.name }}</h4>
+                                    <h4> Created Date : {{ campaign.created_date| date:'d M Y' }}</h4>
+                                    <H4> Mailing List : {{ campaign.mailing_list.name }}</H4>
+                                    <h4> Template Name : {{ campaign.template.template_name}}</h4>
+                                    <h4> Template Category :  {{ campaign.template.category }}</h4>
+                                </div>
+                                <div class="mdl-card__actions mdl-card--border">
+                                    <a href="{% url 'chimp:send_mail' campaign.id %}">
+                                        <button type="button" name="button" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color:#fff;">Send Emails</button>
+                                    </a>
+                                    <a href="{% url 'chimp:edit' campaign.id %}">
+                                        <button type="button" name="button" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color:#fff;">Edit</button>
+                                    </a>
+                                    <a href="{% url 'chimp:delete_campaign' campaign.id %}">
+                                        <button type="button" name="button" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color:#fff;">Delete</button>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     {% empty %}
                     <div class="back">
                         <img src="{% static 'image/rsz_dashboard-compressor.jpg' %}" alt="back_image">

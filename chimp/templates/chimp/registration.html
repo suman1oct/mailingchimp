@@ -12,15 +12,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="{% static 'css/signin.css' %}">
-
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
-
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
-
-        <!-- (Optional) Latest compiled and minified JavaScript translation files -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/i18n/defaults-*.min.js"></script>
     </head>
     <body>
         <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-12 col-xs-12 text-center mrg">
@@ -30,7 +21,7 @@
                     <div class="col-lg-2 trans formimp1">
                         <i class="fa fa-user-o fa-2x" aria-hidden="true" style="padding: 2px;margin: 1px;color: white;"></i>
                     </div>
-                    <div class="col-lg-10 formimp2 trans form-control1" style="padding: 0px;color:white;">
+                    <div class="col-lg-10 formimp2 trans form-control1" style="padding: 0px;">
                         {{form.name}}
                         {{ form.name.errors.0 }}
                     </div>
@@ -39,7 +30,7 @@
                     <div class="col-lg-2 trans formimp1">
                         <i class="fa fa-user-circle fa-2x" aria-hidden="true" style="padding: 2px;margin: 1px;color: white;margin: 1px;color: white;"></i>
                     </div>
-                    <div class="col-lg-10 formimp2 trans form-control1" style="padding: 0px;color:white;">
+                    <div class="col-lg-10 formimp2 trans form-control1" style="padding: 0px;">
                         {{form.username}}
                         {{ form.username.errors.0 }}
                     </div>
@@ -48,7 +39,7 @@
                     <div class="col-lg-2 trans formimp1">
                         <i class="fa fa-key fa-2x" aria-hidden="true" style="padding: 2px;margin: 1px;color: white;"></i>
                     </div>
-                    <div class="col-lg-10 formimp2 trans form-control1" style="padding: 0px;color:white;">
+                    <div class="col-lg-10 formimp2 trans form-control1" style="padding: 0px;">
                         {{form.password}}
                         {{ form.password.errors.0 }}
                     </div>
@@ -57,7 +48,7 @@
                     <div class="col-lg-2 trans formimp1">
                         <i class="fa fa-briefcase fa-2x" aria-hidden="true" style="padding: 2px;margin: 1px;color: white;"></i>
                     </div>
-                    <div class="col-lg-10 formimp2 trans form-control1" style="padding: 0px;color:white;">
+                    <div class="col-lg-10 formimp2 trans form-control1" style="padding: 0px;">
                         {{form.business_name}}
                         {{ form.business_name.errors.0 }}
                     </div>
@@ -66,10 +57,21 @@
                     <div class="col-lg-2 trans formimp1">
                         <i class="fa fa-envelope fa-2x" aria-hidden="true" style="padding: 2px;margin: 1px;color: white;"></i>
                     </div>
-                    <div class="col-lg-10 formimp2 trans form-control1" style="padding: 0px;color:white;">
+                    <div class="col-lg-10 formimp2 trans form-control1" style="padding: 0px;">
                         {{form.email}}
                         {{ form.email.errors.0 }}
                     </div>
+                </div>
+                <div class="col-lg-12 lstbtn" class="btnn btn-successs">
+                    <div class="col-lg-3 col-lg-offset-3" style="padding:0px;">
+                        <h4 style="margin:0px;">Package :</h4>
+                    </div>
+                    <div class="col-lg-3" style="padding:0px;">
+                        {{form.package}}
+                    </div>
+                </div>
+                <div class="col-lg-12 errorbx">
+                    <h4>{{ form.non_field_errors }}</h4>
                 </div>
                 <div class="col-lg-12">
                     <button type="submit" class="btn btn-lg btn-warning lstbtn">Submit</button>

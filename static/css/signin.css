@@ -93,3 +93,11 @@
     margin-top: 30px;
     margin-bottom: 85px;
 }
+.errorbx {
+    margin-top:10px;
+    color:white;
+}
+
+.errorbx ul {
+    padding: 0px;
+}

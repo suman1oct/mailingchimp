@@ -31,7 +31,7 @@ class LoginView(generic.FormView):			# User login view
 			if self.request.user.is_authenticated():
 				redirect('chimp:dashboard')
 		return super(LoginView, self).get(*args, **kwargs)
-		
+
 	def form_valid(self,form):
 		username =form.cleaned_data.get('username')
 		password=form.cleaned_data.get('password')
@@ -41,7 +41,7 @@ class LoginView(generic.FormView):			# User login view
 			return redirect(self.success_url)
 
 
-class LogoutView(generic.View):			
+class LogoutView(generic.View):
 
 	def get(self,request):
 		logout(request)
@@ -49,7 +49,7 @@ class LogoutView(generic.View):
 		return redirect('chimp:login')
 
 
-class RegistrationView(generic.FormView):		
+class RegistrationView(generic.FormView):
 	template_name='chimp/registration.html'
 	form_class=RegistrationForm
 	success_url=reverse_lazy('chimp:login')
@@ -68,37 +68,37 @@ class RegistrationView(generic.FormView):
 		package=form.cleaned_data.get('package')
 		first_name=name.split()[0]
 		last_name = ''
-	
+
 		try:
 			last_name=name.split()[1]
 		except:
 			pass
-	
+
 		user=User(username=username, first_name=first_name, last_name=last_name, email=email)
 		if User.objects.filter(username=user.username).exists():
 			"""
 			check whether user is not already exist
 			"""
 			messages.error(self.request,'Username already exist')
-			return HttpResponse("User already exist")
-				
+			return redirect('chimp:registration')
+
 		user.set_password(password)
 		user.save()
 		userprofile=UserProfile(user=user,business_name=business_name,package=package , email=email)
 		userprofile.save()
 		messages.success(self.request, 'User Register Successfully')
 		return redirect(self.success_url)
-			
 
 
 
-class AddCampaignView(generic.FormView):			
+
+class AddCampaignView(generic.FormView):
 	template_name='chimp/create.html'
 	success_url=reverse_lazy('chimp:dashboard')
 	form_class = AddCampaignForm
 
 	def get_form_kwargs(self):
-		kwargs = super(AddCampaignView, self).get_form_kwargs()		
+		kwargs = super(AddCampaignView, self).get_form_kwargs()
 		kwargs['request'] = self.request
 		return kwargs
 
@@ -132,14 +132,14 @@ class AddMailList(SuccessMessageMixin, CreateView):
 	template_name = 'chimp/add_mail_list.html'
 	success_message = 'Mail list added.'
 	success_url=reverse_lazy('chimp:create')
-	
+
 	def form_valid(self,form, *args, **kwargs):
-		if form.is_valid(): 
+		if form.is_valid():
 			mailinglist=form.save(commit=False)
 			mailinglist.user=self.request.user
 			file_type = self.request.FILES['mailing_list_path'].content_type
 			mime_type_list=['application/vnd.ms-excel','application/msexcel','application/x-msexcel','application/x-ms-excel','application/x-excel','application/x-dos_ms_excel','application/xls','application/x-xls','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-excel.sheet.binary.macroEnabled.12','application/vnd.openxmlformats-officedocument.spreadsheetml.template',]
-			
+
 			try:
 				if(file_type in mime_type_list):
 					mailinglist.save()
@@ -160,7 +160,7 @@ class AddTemplateList(SuccessMessageMixin, CreateView):
 
 
 class SendEmailView(View):
-	
+
 	def get(self, request, *args, **kwargs):
 		campaign_obj=Campaign.objects.get(id=self.kwargs['pk'])
 		u=UserProfile.objects.get(user=self.request.user)
@@ -169,7 +169,7 @@ class SendEmailView(View):
 		path=campaign_obj.mailing_list.mailing_list_path
 		template_path=campaign_obj.template.file
 		campaign_name=campaign_obj.name
-		
+
 		wb = load_workbook(filename = path)
 		sheet = wb.worksheets[0]
 		row_count = sheet.max_row
@@ -185,9 +185,9 @@ class SendEmailView(View):
 					users_name.append(sheet.cell(row=i, column=1).value)
 				except ValidationError as e:
 					print(sheet.cell(row=i, column=1).value + " is invalid email id\n")
-					
+
 		sent_mail=len(users_name)	# Number of count of mailing list
-		
+
 		rem_mail=u.remaining_email
 		if( sent_mail < rem_mail):
 			msg_html = render_to_string(template_path, {'content': self.request.user})
@@ -217,7 +217,7 @@ class DashboardView(generic.ListView):
 
 class HomepageView(generic.ListView):
 	template_name='chimp/homepage.html'
-	
+
 	def get_queryset(self):
 		return TemplateList.objects.all()
 
