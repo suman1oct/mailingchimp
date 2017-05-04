@@ -1,5 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+
 
 def validate_fullname(name):
 	name_part = name.split()
@@ -12,8 +15,7 @@ def validate_file_extension(value):
 
 
 def validateEmail( email ):
-    from django.core.validators import validate_email
-    from django.core.exceptions import ValidationError
+    
     try:
         validate_email( email )
         return True

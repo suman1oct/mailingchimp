@@ -14,9 +14,10 @@ def get_file_path(instance, filename):
 
 
 class MailingList(models.Model):
-	name=models.CharField(max_length=100)
+	name=models.CharField(max_length=100, unique=True)
 	user=models.ForeignKey('auth.User', on_delete=models.CASCADE)
 	mailing_list_path=models.FileField(upload_to=get_file_path)
+	add_date= models.DateTimeField(default=timezone.now)
 	
 	def __str__(self):
 		return self.name

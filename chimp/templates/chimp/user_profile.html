@@ -56,18 +56,19 @@
 					<div class="container">
 						<div class="col-lg-8 col-lg-offset-2" style="margin-top:30px;">
 							<div class="demo-card-event mdl-card mdl-shadow--2dp col-lg-12" style="width: 100%;">
-								<div class="mdl-card--expand text-left col-lg-9 col-lg-offset-3" style="color:#fff;padding:18px;margin-top: 20px;">
+								<div class="mdl-card--expand text-left col-lg-9 col-lg-offset-3" style="color:#fff;padding:18px;margin-top: 10px;">
                                     {% for user in userprofile_list %}
-                                    <h3>USER NAME : {{ user.user }}<h3>
-                                    <h3>SENT EMAILS : {{ user.sent_email }}<h3>
-                                    <h3>REMAINING EMAILS : {{ user.remaining_email }}<h3>
-                                    <h3>BUSINESS NAME : {{ user.business_name }}<h3>
-                                    <h3>EMAIL ID  : {{ user.email }}<h3>
+                                    <h3>Name : {{ request.user.get_full_name }}<h3>
+                                    <h3>User Name : {{ user.user }}<h3>
+                                    <h3>Sent Email : {{ user.sent_email }}<h3>
+                                    <h3>Remaining Emails : {{ user.remaining_email }}<h3>
+                                    <h3>Bussiness Name : {{ user.business_name }}<h3>
+                                    <h3>Email Id  : {{ user.email }}<h3>
                                     {%  endfor %}
 								</div>
                                 <div class="text-center col-lg 12">
                                     <a href="{% url 'chimp:edit_user_profile' user.id %}">
-                                        <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" style="margin-top: 20px;">
+                                        <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" style="margin-top: -15px;">
                                             Edit Profile
                                         </button>
                                     </a>
@@ -78,5 +79,30 @@
                 </div>
             </main>
         </div>
+         <!-- Modal -->
+        <div class="modal fade" id="modal-dash" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        {% for message in messages %}
+                        <h3>{{ message }}</h3>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+        {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                $(document).ready(function(){
+                    $('#modal-dash').modal('show');
+                });
+            {% endif %}
+        {% endfor %}
+        {% endif %}
+        </script>
     </body>
 </html>

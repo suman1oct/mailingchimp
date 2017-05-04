@@ -25,28 +25,21 @@ class RegistrationForm(forms.Form):				# User Sign Up Form
 	business_name=forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Business'}))
 	email=forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'email id'}), validators=[validateEmail])
 	package=forms.CharField(max_length=10,label='Package',widget=forms.Select(choices=PACKAGE_CHOICES),)
-<<<<<<< 7bb1ac9f3015d8fd9904d309e43e421b57e4cd38
 
-=======
-	
-	
->>>>>>> added edit user profile
 	def clean_username(self):
 		if User.objects.filter(username=self.cleaned_data['username']).exists():
 			raise forms.ValidationError('user already exist')
 
 		return self.cleaned_data['username']
-<<<<<<< 7bb1ac9f3015d8fd9904d309e43e421b57e4cd38
+
 
 	def clean_email(self):
 		email = self.cleaned_data.get('email')
 		if email and User.objects.filter(email=email).exists():
-			raise forms.ValidationError(u'Email addresses must be unique.')
+			raise forms.ValidationError(u'Email address already register.')
 		return email
 
-=======
-	
->>>>>>> added edit user profile
+
 	def clean(self):
 		username = self.cleaned_data.get('username')
 		name = self.cleaned_data.get('name')
@@ -97,21 +90,36 @@ class EditCampaignForm(forms.ModelForm):		# for edit the existing campaign of sp
 
 
 class EditUserProfileForm(forms.Form):				# User Sign Up Form
-	username =forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'User name'}))
-	name =forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Name'}))
-	password=forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
-	business_name=forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Business'}))
+	name =forms.CharField(max_length=100, widget=forms.TextInput())
+	business_name=forms.CharField(max_length=100, widget=forms.TextInput())
 
 	def clean_username(self):
 		if User.objects.filter(username=self.cleaned_data['username']).exists():
 			raise forms.ValidationError('user already exist')
-
 		return self.cleaned_data['username']
 
-	def clean(self):
-		username = self.cleaned_data.get('username')
-		name = self.cleaned_data.get('name')
-		business_name =  self.cleaned_data.get('business_name')
-		password = self.cleaned_data.get('password')
-		return self.cleaned_data
 
+class MailingListForm(forms.ModelForm):
+    #mailing_list_path=forms.FileField()
+
+    """def clean_mailing_list_path(self):
+    	mime_type_list=['application/vnd.ms-excel','application/msexcel','application/x-msexcel','application/x-ms-excel','application/x-excel','application/x-dos_ms_excel','application/xls','application/x-xls','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-excel.sheet.binary.macroEnabled.12','application/vnd.openxmlformats-officedocument.spreadsheetml.template',]
+    	if(self.cleaned_data['mailing_list_path'] not in mime_type_list):
+    		raise forms.ValidationError("wrong file format")
+   	return cleaned_data['mailing_list_path']
+   """ 
+    
+    """def clean(self):
+        cleaned_data = super(MailingListForm, self).clean()
+
+        name = cleaned_data.get('name')
+        mailing_list_path = cleaned_data.get('mailing_list_path')
+        mime_type_list=['application/vnd.ms-excel','application/msexcel','application/x-msexcel','application/x-ms-excel','application/x-excel','application/x-dos_ms_excel','application/xls','application/x-xls','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-excel.sheet.binary.macroEnabled.12','application/vnd.openxmlformats-officedocument.spreadsheetml.template',]
+        if(mailing_list_path not in mime_type_list):
+        	raise forms.ValidationError("wrong file format")
+        return self.cleaned_data
+
+"""
+    class Meta:
+        model = MailingList
+        fields = ['name', 'mailing_list_path']

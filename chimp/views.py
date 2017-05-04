@@ -144,8 +144,10 @@ class AddMailList(SuccessMessageMixin, CreateView):
 			try:
 				if(file_type in mime_type_list):
 					mailinglist.save()
+					success_message = 'Mail list added.'
 				else:
-					return HttpResponse("wrong file format")
+					messages.error(self.request,'wrong file format')
+					return redirect('chimp:add_mail_list')
 			except:
 				raise forms.ValidationError('Wrong file format')
 
@@ -199,9 +201,11 @@ class SendEmailView(View):
 			u.sent_email=total_sent_email
 			u.remaining_email=total_remaining_email
 			u.save()
-			return HttpResponse("Email sent succesfuly")
+			messages.success(self.request, 'Emails sent successfully')
+			return redirect('chimp:show_campaign')
 		else:
-			return HttpResponse("Emails are less")
+			messages.success(self.request, 'Remaining emails are not enough')
+			return redirect('chimp:show_campaign')
 
 class DashboardView(generic.ListView):
 	template_name='chimp/dashboard.html'
@@ -280,7 +284,7 @@ class DeleteCampaignView(generic.DeleteView):
 
 
 class DeleteMailingListView(generic.DeleteView):
-	model=Campaign
+	model=MailingList
 	template_name='chimp/delete_mailing_list.html'
 	success_url = reverse_lazy('chimp:show_mailing_list')
 
@@ -300,12 +304,15 @@ class DeleteMailingListView(generic.DeleteView):
 class EditUserProfileView(generic.FormView):		
 	template_name='chimp/edit_user_profile.html'
 	form_class=EditUserProfileForm
-	success_url=reverse_lazy('chimp:dashboard')
+	success_url=reverse_lazy('chimp:user_profile')
+
+	def get_initial(self):
+		initial={"username":self.request.user.username, "name":self.request.user.get_full_name(), "business_name":self.request.user.profile.all()[0].business_name}
+		return initial.copy()
 
 	def form_valid(self,form):
-		username = form.cleaned_data.get('username')
+		#import ipdb; ipdb.set_trace()
 		name =form.cleaned_data.get('name')
-		password=form.cleaned_data.get('password')
 		business_name =form.cleaned_data.get('business_name')
 		first_name=name.split()[0]
 		last_name = ''
@@ -314,16 +321,14 @@ class EditUserProfileView(generic.FormView):
 			last_name=name.split()[1]
 		except:
 			pass
-	
 		u = UserProfile.objects.get(user=self.request.user)
 		u.business_name=business_name
-		u.password=password
-		u.business_name=business_name
+
 		u.save()
 
 		self.request.user.first_name = first_name
 		self.request.user.last_name = last_name
 		self.request.user.save()
 		messages.success(self.request,'User Profile Edited successfully')
-		return redirect(self.success_url)
+		return super(EditUserProfileView, self).form_valid(form)
 
