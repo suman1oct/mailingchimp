@@ -223,7 +223,7 @@ class SendEmailView(View):
 			messages.success(self.request, 'Emails sent successfully')
 			return redirect('chimp:show_campaign')
 		else:
-			messages.success(self.request, 'Please Contact to Admin for purchase more email')
+			messages.success(self.request, 'Please Contact to Admin for purchasing more emails')
 			return redirect('chimp:show_campaign')
 
 class DashboardView(generic.ListView):
@@ -263,7 +263,7 @@ class ShowTemplateView(generic.ListView):
 	model=Template
 
 	def get_queryset(self):
-		return TemplateList.objects.all()
+		return Template.objects.all()
 
 class ShowMailingListView(generic.ListView):
 	template_name='chimp/show_mailing_list.html'
