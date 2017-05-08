@@ -35,7 +35,7 @@ class Template(models.Model):
 	image=models.ImageField(upload_to='images/')
 	template_name=models.CharField(max_length=100)
 	#category=models.ForeignKey(Category,on_delete=models.CASCADE,null=True)
-	category=models.CharField(max_length=10, choices=CATEGORY_CHOICES, null=False)
+	category=models.CharField(max_length=30, choices=CATEGORY_CHOICES, null=False)
 	file=models.FileField(upload_to=get_templatesfile_path)
 	
 	def __str__(self):
