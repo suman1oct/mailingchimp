@@ -3,11 +3,11 @@ from django.views import generic
 from django.contrib.auth import authenticate,login,logout
 from django import forms
 from django.shortcuts import render , redirect
-from . forms import LoginForm, RegistrationForm, EmailForm, AddCampaignForm, EditCampaignForm, EditUserProfileForm
+from . forms import LoginForm, RegistrationForm, EmailForm,MailingListForm, AddCampaignForm, EditCampaignForm, EditUserProfileForm
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
-from . models import MailingList, TemplateList, Campaign, UserProfile
+from . models import MailingList, Template, Campaign, UserProfile
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -18,6 +18,8 @@ from django.template.loader import render_to_string
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+
+from django.core.mail import EmailMessage
 
 
 
@@ -127,8 +129,10 @@ class EditCampaignView(SuccessMessageMixin, generic.UpdateView):
 
 class AddMailList(SuccessMessageMixin, CreateView):
 	model= MailingList
-	fields = ['name', 'mailing_list_path']
+	#fields = ['name', 'mailing_list_path']
 	#fields = '__all__'
+	form_class = MailingListForm
+	#template_name = 'chimp/abc.html'
 	template_name = 'chimp/add_mail_list.html'
 	success_message = 'Mail list added.'
 	success_url=reverse_lazy('chimp:show_mailing_list')
@@ -138,24 +142,25 @@ class AddMailList(SuccessMessageMixin, CreateView):
 		if form.is_valid():
 			mailinglist=form.save(commit=False)
 			mailinglist.user=self.request.user
-			file_type = self.request.FILES['mailing_list_path'].content_type
-			mime_type_list=['application/vnd.ms-excel','application/msexcel','application/x-msexcel','application/x-ms-excel','application/x-excel','application/x-dos_ms_excel','application/xls','application/x-xls','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-excel.sheet.binary.macroEnabled.12','application/vnd.openxmlformats-officedocument.spreadsheetml.template',]
-
-			try:
-				if(file_type in mime_type_list):
-					mailinglist.save()
-					success_message = 'Mail list added.'
-				else:
-					messages.error(self.request,'wrong file format')
-					return redirect('chimp:add_mail_list')
-			except:
-				raise forms.ValidationError('Wrong file format')
+			# file_type = self.request.FILES['mailing_list_path'].content_type
+			# mime_type_list=['application/vnd.ms-excel','application/msexcel','application/x-msexcel','application/x-ms-excel','application/x-excel','application/x-dos_ms_excel','application/xls','application/x-xls','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-excel.sheet.binary.macroEnabled.12','application/vnd.openxmlformats-officedocument.spreadsheetml.template',]
+			# if(file_type in mime_type_list):
+			mailinglist.save()
+			# 		success_message = 'Mail list added.'
+			# else:
+			# 		return HttpResponse("Please upload excel file")
+			# 		raise forms.ValidationError('Wrong file format')
 
 			return super(AddMailList, self).form_valid(form, *args, **kwargs)
 
+	def get_form_kwargs(self):
+		kwargs = super(AddMailList, self).get_form_kwargs()
+		kwargs['request'] = self.request
+		return kwargs
+
 
 class AddTemplateList(SuccessMessageMixin, CreateView):
-	model=TemplateList
+	model=Template
 	fields= ['image','template_name','category','path']
 	template_name='chimp/add_template_list.html'
 	success_message='Template list added'
@@ -194,8 +199,22 @@ class SendEmailView(View):
 		rem_mail=u.remaining_email
 		if( sent_mail < rem_mail):
 			msg_html = render_to_string(template_path, {'content': self.request.user})
+			# for receiver in receivers:
+			# 	send_mail(campaign_name, '', 'mail Buddy', [receiver], html_message=msg_html,)
+			
+			from django.core import mail
+			connection = mail.get_connection()
+			# Manually open the connection
+			connection.open()
+
+			# Construct an email message that uses the connection
 			for receiver in receivers:
-				send_mail(campaign_name, '', u.email, [receiver], html_message=msg_html,)
+				email1 = mail.EmailMessage('campaign_name',msg_html,'noreply@mailBuddy',[receiver],connection=connection,)
+				email1.content_subtype = "html"
+				email1.send() # Send the email
+			connection.close()
+
+			
 			total_sent_email=u.sent_email+sent_mail
 			total_remaining_email=u.remaining_email-sent_mail
 			u.sent_email=total_sent_email
@@ -204,7 +223,7 @@ class SendEmailView(View):
 			messages.success(self.request, 'Emails sent successfully')
 			return redirect('chimp:show_campaign')
 		else:
-			messages.success(self.request, 'Remaining emails are not enough')
+			messages.success(self.request, 'Please Contact to Admin for purchase more email')
 			return redirect('chimp:show_campaign')
 
 class DashboardView(generic.ListView):
@@ -224,7 +243,7 @@ class HomepageView(generic.ListView):
 	template_name='chimp/homepage.html'
 
 	def get_queryset(self):
-		return TemplateList.objects.all()
+		return Template.objects.all()
 
 class CampaignDetailView(generic.DetailView):
 	template_name = 'chimp/campaign_detail.html'
@@ -241,7 +260,7 @@ class CampaignDetailView(generic.DetailView):
 
 class ShowTemplateView(generic.ListView):
 	template_name='chimp/show_template.html'
-	model=TemplateList
+	model=Template
 
 	def get_queryset(self):
 		return TemplateList.objects.all()

@@ -10,9 +10,6 @@ def validate_fullname(name):
 		raise ValidationError(_('{0} is not valid name, Please enter Full Name'.format(name)))
 
 
-def validate_file_extension(value):
-	pass
-
 
 def validateEmail( email ):
     
@@ -21,3 +18,9 @@ def validateEmail( email ):
         return True
     except ValidationError:
         raise ValidationError("Please enter a valid  email address")
+
+
+def validate_file_extension(file):
+	pass
+	
+

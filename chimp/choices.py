@@ -5,8 +5,8 @@ PACKAGE_CHOICES=(
 )
 
 CATEGORY_CHOICES=(
-	('PM', 'promotional'),
-	('AD','advertisement'),
-	('SL','social'),
-	('OT','others'),
+	('PROMOTIONAL', 'promotional'),
+	('ADVERTISEMENT','advertisement'),
+	('SOCIAL','social'),
+	('OTHER','others'),
 )

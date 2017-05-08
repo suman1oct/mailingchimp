@@ -7,7 +7,7 @@ from .models import Campaign, MailingList
 from .validation import validate_fullname ,validateEmail
 
 class LoginForm(forms.Form):					# User Login Form
-	username =forms.CharField(max_length=100,widget=forms.TextInput(attrs={'placeholder': 'User name'}))
+	username =forms.CharField(max_length=100,widget=forms.TextInput(attrs={'placeholder': 'Username'}))
 	password=forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
 
 	def clean(self):
@@ -15,11 +15,11 @@ class LoginForm(forms.Form):					# User Login Form
 		password= self.cleaned_data.get('password')
 		user=authenticate(username=username, password=password)
 		if not user or not user.is_active:
-			raise forms.ValidationError("Not valid user")
+			raise forms.ValidationError("Not a Valid Username Or Password")
 		return self.cleaned_data
 
 class RegistrationForm(forms.Form):				# User Sign Up Form
-	username =forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'User name'}))
+	username =forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
 	name =forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Name'}))
 	password=forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
 	business_name=forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Business'}))
@@ -100,26 +100,18 @@ class EditUserProfileForm(forms.Form):				# User Sign Up Form
 
 
 class MailingListForm(forms.ModelForm):
-    #mailing_list_path=forms.FileField()
 
-    """def clean_mailing_list_path(self):
-    	mime_type_list=['application/vnd.ms-excel','application/msexcel','application/x-msexcel','application/x-ms-excel','application/x-excel','application/x-dos_ms_excel','application/xls','application/x-xls','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-excel.sheet.binary.macroEnabled.12','application/vnd.openxmlformats-officedocument.spreadsheetml.template',]
-    	if(self.cleaned_data['mailing_list_path'] not in mime_type_list):
-    		raise forms.ValidationError("wrong file format")
-   	return cleaned_data['mailing_list_path']
-   """ 
+    def __init__(self, *args, **kwargs):
+    	self.request = kwargs.pop('request', None)
+    	super(MailingListForm, self).__init__(*args, **kwargs)
     
-    """def clean(self):
-        cleaned_data = super(MailingListForm, self).clean()
-
-        name = cleaned_data.get('name')
-        mailing_list_path = cleaned_data.get('mailing_list_path')
+    def clean_mailing_list_path(self):
+        file_type = self.request.FILES['mailing_list_path'].content_type
         mime_type_list=['application/vnd.ms-excel','application/msexcel','application/x-msexcel','application/x-ms-excel','application/x-excel','application/x-dos_ms_excel','application/xls','application/x-xls','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-excel.sheet.binary.macroEnabled.12','application/vnd.openxmlformats-officedocument.spreadsheetml.template',]
-        if(mailing_list_path not in mime_type_list):
-        	raise forms.ValidationError("wrong file format")
-        return self.cleaned_data
-
-"""
+        if(file_type not in  mime_type_list):
+            raise forms.ValidationError('Please upload .xlsx file')
+        return self.cleaned_data['mailing_list_path']
+    
     class Meta:
         model = MailingList
-        fields = ['name', 'mailing_list_path']
+        fields = ['name','mailing_list_path',]
